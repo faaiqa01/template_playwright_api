@@ -1,6 +1,7 @@
 # Playwright Template
 
 > Playwright E2E Testing Framework with TypeScript and Best Practices
+> AI assistants: start with [`AGENTS.md`](./AGENTS.md), then continue to [`SOUL.md`](./SOUL.md) and [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ## 📋 Overview
 
@@ -57,6 +58,18 @@ npm install
 # Install browser binaries
 npx playwright install
 ```
+
+### AI Assistant Quick Help
+
+Jika tim memakai AI assistant (Codex, Claude CLI, dsb), gunakan [`AGENTS.md`](./AGENTS.md) sebagai panduan perilaku dan shortcut bantuan.
+
+Keyword yang tersedia:
+- `help`
+- `help test`
+- `help debug`
+- `help structure`
+- `help auth`
+- `help ci`
 
 ## Template Cleanup (Wajib)
 
@@ -193,6 +206,7 @@ Pengecualian penting:
 - [`SOUL.md`](./SOUL.md) - Best practices and coding standards
 - [`src/README.md`](./src/README.md) - Source directory documentation
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) - Contributing guidelines
+- [`AGENTS.md`](./AGENTS.md) - AI assistant instructions and quick-help contract
 
 ## 🎯 Key Features
 
@@ -361,6 +375,7 @@ JSON report disimpan di `test-results/results.json`
 ## 🤝 Contributing
 
 Lihat [`CONTRIBUTING.md`](./CONTRIBUTING.md) untuk panduan berkontribusi.
+Jika menggunakan AI assistant, baca juga [`AGENTS.md`](./AGENTS.md).
 
 ## 📖 References
 

@@ -7,15 +7,16 @@ Terima kasih atas ketertarikan Anda untuk berkontribusi pada project ini! Beriku
 Sebelum berkontribusi, pastikan Anda telah:
 
 1. Membaca [SOUL.md](./SOUL.md) untuk memahami best practices
-2. Menginstall dependencies: `npm install`
-3. Menginstall browser: `npx playwright install`
-4. Jalankan template cleanup (Rule ID: `SOUL-TEMPLATE-CLEANUP-001`):
+2. Membaca [AGENTS.md](./AGENTS.md) untuk panduan AI agent (`help`, `help auth`, `help ci`)
+3. Menginstall dependencies: `npm install`
+4. Menginstall browser: `npx playwright install`
+5. Jalankan template cleanup (Rule ID: `SOUL-TEMPLATE-CLEANUP-001`):
    `npm run template:cleanup`
-5. (Windows) Jika menggunakan RTK, jalankan dari binary lokal project:
+6. (Windows) Jika menggunakan RTK, jalankan dari binary lokal project:
    `npm run rtk:version`
-6. Jika mengerjakan task UI/browser, gunakan Playwright MCP project-local:
+7. Jika mengerjakan task UI/browser, gunakan Playwright MCP project-local:
    `npm run mcp:playwright`
-7. Jika mengerjakan task dokumentasi API/library, jalankan Context7 MCP:
+8. Jika mengerjakan task dokumentasi API/library, jalankan Context7 MCP:
    `npm run mcp:context7`
 
 ## Development Workflow
@@ -66,6 +67,20 @@ Catatan MCP:
 - Untuk automation/debugging berbasis browser, gunakan Playwright MCP dari project ini.
 - Untuk dokumentasi library/API terbaru, gunakan Context7 MCP dari project ini.
 - Konfigurasi keduanya ada di `mcp.playwright.json`.
+
+### 3.1 Panduan AGENTS.md untuk AI Assistant
+
+Jika Anda atau tim menggunakan AI assistant (Codex, Claude CLI, dsb), gunakan `AGENTS.md` sebagai kontrak perilaku agent di repo ini.
+
+Keyword bantuan yang tersedia:
+- `help`: ringkasan command utama dan alur cepat.
+- `help test`: cara menjalankan test per scope.
+- `help debug`: langkah debug standar.
+- `help structure`: peta folder.
+- `help auth`: workflow authenticated session + storage state.
+- `help ci`: baseline command dan perilaku saat `CI=true`.
+
+Tujuannya agar jawaban AI konsisten, singkat, dan langsung executable sesuai standar project.
 
 ### 4. Code Style
 
