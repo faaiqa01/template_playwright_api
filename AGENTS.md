@@ -110,6 +110,8 @@ Command baseline CI:
 - Hindari `waitForTimeout` jika bisa pakai assertion/wait yang deterministik.
 - Jangan hardcode secret; gunakan `.env` atau config yang ada.
 - Untuk test baru, pertimbangkan positive path + minimal satu negative/edge case.
+- Untuk test E2E baru/yang diubah, gunakan `test.step()` pada langkah bisnis utama agar Playwright report mudah dibaca (bukan hanya step teknis locator/expect).
+- Nama `test.step()` harus deskriptif dan mengikuti urutan flow skenario (contoh: `Arrange`, `Act`, `Assert` atau nama langkah bisnis yang setara).
 
 ## 10) Response Style (untuk agent)
 - Jawaban ringkas, langsung bisa dieksekusi.

@@ -194,6 +194,28 @@ test('user can login', async ({ page }) => {
 });
 ```
 
+### Playwright Report Readability
+
+Agar report mudah dianalisis saat failure:
+- Gunakan `test.step()` untuk langkah bisnis utama pada test E2E.
+- Pastikan nama step deskriptif dan berurutan sesuai flow skenario.
+- Hindari test yang hanya berisi assertion teknis tanpa pengelompokan step.
+
+Contoh pola yang direkomendasikan:
+```typescript
+await test.step('Arrange: siapkan user dan halaman awal', async () => {
+  // setup
+});
+
+await test.step('Act: jalankan aksi utama', async () => {
+  // action
+});
+
+await test.step('Assert: verifikasi hasil', async () => {
+  // assertion
+});
+```
+
 ### Test Independence
 
 Setiap test harus bisa berjalan sendiri tanpa ketergantungan test lain.

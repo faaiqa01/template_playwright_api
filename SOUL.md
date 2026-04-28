@@ -276,6 +276,31 @@ test('user can login with valid credentials', async ({ page }) => {
 });
 ```
 
+### Reporting Readability Rules (Wajib)
+
+Untuk meningkatkan keterbacaan Playwright HTML report:
+- Gunakan `test.step('...')` untuk setiap langkah bisnis utama dalam test.
+- Hindari test yang hanya menampilkan detail teknis `expect(locator)...` tanpa konteks langkah.
+- Nama step harus jelas dan berurutan sesuai skenario (contoh: `Arrange: ...`, `Act: ...`, `Assert: ...`).
+- Untuk flow panjang, pecah menjadi beberapa `test.step` kecil agar titik gagal mudah diidentifikasi.
+
+Contoh:
+```typescript
+test('user can filter dashboard data', async ({ page }) => {
+  await test.step('Arrange: buka dashboard dalam kondisi sudah login', async () => {
+    // setup
+  });
+
+  await test.step('Act: pilih filter divisi', async () => {
+    // action
+  });
+
+  await test.step('Assert: data card berubah sesuai filter', async () => {
+    // assertion
+  });
+});
+```
+
 #### Test dengan Login Helper
 
 Test yang membutuhkan autentikasi HARUS menggunakan login helper di `beforeEach`:
