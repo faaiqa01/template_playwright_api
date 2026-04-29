@@ -85,7 +85,8 @@ Gunakan panduan ini saat task terkait login/session:
 2. Storage state utama: `playwright/.auth/user.json`.
 3. Test authenticated sebaiknya gunakan session global (hindari login ulang di tiap test).
 4. Jika ingin test login flow murni, override storage state kosong seperti di `tests/e2e/login.spec.ts`.
-5. Jika session invalid, jalankan ulang setup/auth test agar storage state diperbarui.
+5. Skenario logout sebaiknya juga isolated dengan storage state kosong (login sendiri di test tersebut), agar tidak memutus session suite lain.
+6. Jika session invalid, jalankan ulang setup/auth test agar storage state diperbarui.
 
 Command rujukan:
 - `npm test -- tests/auth.setup.ts`
@@ -151,7 +152,8 @@ Auth quick help:
 2. Storage state utama ada di playwright/.auth/user.json.
 3. Untuk test authenticated, gunakan session global; jangan login ulang tiap test.
 4. Untuk login flow murni, pakai storageState kosong (lihat tests/e2e/login.spec.ts).
-5. Jika session kadaluarsa/invalid, regenerate auth state lalu rerun test.
+5. Untuk logout flow, gunakan storageState kosong + login di dalam spec agar tidak mengganggu test authenticated lain.
+6. Jika session kadaluarsa/invalid, regenerate auth state lalu rerun test.
 ```
 
 Saat user mengetik `help ci`, agent bisa jawab format berikut:

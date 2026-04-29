@@ -62,6 +62,8 @@ Catatan auth:
 - Project ini menggunakan global login session (`tests/auth.setup.ts` + `storageState`).
 - Untuk test authenticated, hindari login ulang di setiap `beforeEach`.
 - Skenario login (`tests/e2e/login.spec.ts` dan sejenisnya) wajib berjalan tanpa session global.
+- Skenario logout (`tests/e2e/logout.spec.ts` dan sejenisnya) wajib isolated (storage state kosong + login di dalam spec).
+- Jangan jadikan test logout sebagai dependency/precondition untuk suite authenticated lainnya.
 
 Catatan MCP:
 - Untuk automation/debugging berbasis browser, gunakan Playwright MCP dari project ini.
@@ -227,6 +229,7 @@ Gunakan pola berikut saat menambah test baru:
 - Authenticated area (dashboard/profile/settings): gunakan session global yang sudah disiapkan.
 - Jangan duplikasi flow login di setiap test authenticated.
 - Login flow tests tetap dari state kosong (tanpa session global) agar validasi login tetap nyata.
+- Logout flow tests juga dari state kosong agar perubahan session tidak merusak test lain.
 
 ### Playwright MCP (Project Policy)
 

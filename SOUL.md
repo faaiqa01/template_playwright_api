@@ -77,6 +77,8 @@ Gunakan global authenticated session untuk test yang membutuhkan user sudah logi
 Pengecualian penting:
 - Test scenario login itu sendiri (`login.spec.ts` dan test sejenis) **WAJIB** berjalan tanpa session global.
 - Pada file login scenario, override `storageState` menjadi kosong agar flow login tetap tervalidasi end-to-end.
+- Test scenario logout (`logout.spec.ts` dan test sejenis) **WAJIB** isolated: gunakan storage state kosong, lakukan login di dalam spec, lalu logout.
+- Test logout tidak boleh dijadikan precondition untuk suite authenticated lain.
 
 ## 🧰 RTK Usage Policy (Wajib)
 
