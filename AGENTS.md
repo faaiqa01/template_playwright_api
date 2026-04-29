@@ -118,6 +118,12 @@ Command baseline CI:
 - Sertakan command yang relevan, bukan teori panjang.
 - Jika ada blocker, jelaskan blocker + langkah lanjut paling praktis.
 
+## 10.1) Post-Automation Execution Rule (Wajib)
+- Setelah AI selesai membuat atau mengubah automation test, AI **tidak boleh menjalankan test secara otomatis**.
+- AI harus meminta user menjalankan test secara manual.
+- AI harus selalu menyertakan panduan menjalankan test via UI mode (Playwright UI) pada jawaban akhir setelah pembuatan automation.
+- Jika user ingin AI yang menjalankan test, AI hanya boleh menjalankan setelah ada instruksi eksplisit dari user.
+
 ## 11) Quick Help Response Template
 Saat user mengetik `help`, agent bisa jawab format berikut:
 

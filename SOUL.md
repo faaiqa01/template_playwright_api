@@ -194,6 +194,12 @@ export class LoginPage {
 
 ## ⚠️ Strict Rules
 
+### Post-Automation Execution Rule (Wajib)
+1. Setelah AI/agent selesai membuat atau mengubah automation test, AI/agent **tidak boleh menjalankan test secara otomatis**.
+2. AI/agent harus meminta user menjalankan test secara manual.
+3. AI/agent harus selalu memberikan panduan menjalankan test via Playwright UI mode pada jawaban akhir.
+4. AI/agent hanya boleh menjalankan test jika ada instruksi eksplisit dari user.
+
 ### Wajib Diterapkan
 1. **Semua test HARUS menggunakan Page Object Model** - Tidak boleh ada selector langsung di test files
 2. **Setiap locator HARUS memiliki data-testid** - Gunakan `data-testid` attribute sebagai selector utama
