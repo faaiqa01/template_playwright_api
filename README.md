@@ -134,6 +134,7 @@ npm test
 
 # Run specific test suite
 npm run test:e2e
+npm run test:e2e:ui
 npm run test:integration
 npm run test:unit
 
@@ -204,6 +205,12 @@ Template ini menggunakan pola authenticated session global:
 - Setup project dijalankan otomatis lewat `dependencies` di `playwright.config.ts`
 - Test yang membutuhkan user login (contoh dashboard) tidak perlu login ulang di `beforeEach`
 
+Pemisahan run mode (direkomendasikan):
+- `playwright.config.ts`: run utama yang dapat melibatkan project `setup`.
+- `playwright.e2e-ui.config.ts`: UI E2E khusus tanpa project `setup` (untuk reuse session existing saat debugging).
+- Gunakan `npm run test:e2e:ui` atau `npm run test:ui` untuk UI mode terpisah tersebut.
+- Jika session belum ada/expired/invalid, jalankan manual `npm run auth:setup` sebelum `npm run test:e2e:ui`.
+
 Pengecualian penting:
 - Skenario login (`tests/e2e/login.spec.ts` dan sejenisnya) **tidak menggunakan session global**
 - Login scenario harus start dari state kosong agar flow login tervalidasi end-to-end
@@ -214,9 +221,10 @@ Pengecualian penting:
 |---------|-------------|
 | `npm test` | Run all tests |
 | `npm run test:e2e` | Run E2E tests only |
+| `npm run test:e2e:ui` | Run E2E tests in UI mode with isolated config (without auto-running `auth.setup.ts`) |
 | `npm run test:integration` | Run integration tests only |
 | `npm run test:unit` | Run unit tests only |
-| `npm run test:ui` | Run tests with UI mode |
+| `npm run test:ui` | Alias UI E2E mode with isolated config (without auto-running `auth.setup.ts`) |
 | `npm run test:headed` | Run tests with visible browser |
 | `npm run test:debug` | Run tests in debug mode |
 | `npm run test:report` | Show HTML test report |
@@ -363,6 +371,9 @@ Edit [`playwright.config.ts`](./playwright.config.ts) untuk mengubah:
 - Browser configurations
 - Reporter settings
 - Auth setup project dan `storageState`
+
+Edit [`playwright.e2e-ui.config.ts`](./playwright.e2e-ui.config.ts) untuk mode UI E2E terpisah
+(tanpa project `setup`) agar debugging session reuse lebih stabil.
 
 ### TypeScript Config
 

@@ -48,6 +48,7 @@ npm test
 
 # Run spesifik test suite
 npm run test:e2e
+npm run test:e2e:ui
 npm run test:integration
 npm run test:unit
 
@@ -64,6 +65,7 @@ Catatan auth:
 - Skenario login (`tests/e2e/login.spec.ts` dan sejenisnya) wajib berjalan tanpa session global.
 - Skenario logout (`tests/e2e/logout.spec.ts` dan sejenisnya) wajib isolated (storage state kosong + login di dalam spec).
 - Jangan jadikan test logout sebagai dependency/precondition untuk suite authenticated lainnya.
+- Untuk debugging UI dengan session existing, gunakan config terpisah (`playwright.e2e-ui.config.ts`) lewat `npm run test:e2e:ui`/`npm run test:ui` agar `auth.setup.ts` tidak auto-run.
 
 Catatan MCP:
 - Untuk automation/debugging berbasis browser, gunakan Playwright MCP dari project ini.

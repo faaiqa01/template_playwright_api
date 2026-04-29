@@ -74,6 +74,11 @@ Gunakan global authenticated session untuk test yang membutuhkan user sudah logi
 - Konfigurasikan project browser dengan `dependencies: ['setup']` dan `use.storageState`.
 - Untuk test area authenticated (mis. dashboard/profile), jangan login ulang di `beforeEach`; langsung navigate ke halaman target.
 
+Aturan pemisahan run mode:
+- `playwright.config.ts` dipakai untuk run utama yang boleh melibatkan project `setup`.
+- `playwright.e2e-ui.config.ts` dipakai khusus UI mode E2E agar `auth.setup.ts` tidak auto-run saat debugging.
+- Untuk UI mode, gunakan `npm run test:e2e:ui` (atau `npm run test:ui` bila di-map ke config terpisah).
+
 Pengecualian penting:
 - Test scenario login itu sendiri (`login.spec.ts` dan test sejenis) **WAJIB** berjalan tanpa session global.
 - Pada file login scenario, override `storageState` menjadi kosong agar flow login tetap tervalidasi end-to-end.
@@ -199,8 +204,9 @@ export class LoginPage {
 ### Post-Automation Execution Rule (Wajib)
 1. Setelah AI/agent selesai membuat atau mengubah automation test, AI/agent **tidak boleh menjalankan test secara otomatis**.
 2. AI/agent harus meminta user menjalankan test secara manual.
-3. AI/agent harus selalu memberikan panduan menjalankan test via Playwright UI mode pada jawaban akhir.
-4. AI/agent hanya boleh menjalankan test jika ada instruksi eksplisit dari user.
+3. AI/agent harus selalu memberikan panduan menjalankan test via `npm run test:e2e:ui` pada jawaban akhir.
+4. AI/agent harus selalu mengingatkan user menjalankan `npm run auth:setup` manual jika session auth belum tersedia/expired/invalid sebelum `npm run test:e2e:ui`.
+5. AI/agent hanya boleh menjalankan test jika ada instruksi eksplisit dari user.
 
 ### Wajib Diterapkan
 1. **Semua test HARUS menggunakan Page Object Model** - Tidak boleh ada selector langsung di test files

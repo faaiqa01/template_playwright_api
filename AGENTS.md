@@ -43,9 +43,10 @@ Template default:
 Gunakan command berikut sesuai kebutuhan:
 - `npm test`: jalankan semua test.
 - `npm run test:e2e`: jalankan test E2E (`tests/e2e`).
+- `npm run test:e2e:ui`: jalankan test E2E UI mode dengan config terpisah (tanpa auto-run `setup`).
 - `npm run test:integration`: jalankan integration test (`tests/integration`).
 - `npm run test:unit`: jalankan unit test (`tests/unit`).
-- `npm run test:ui`: buka Playwright UI mode.
+- `npm run test:ui`: alias ke UI mode E2E terpisah (tanpa auto-run `setup`).
 - `npm run test:headed`: jalankan dengan browser terlihat.
 - `npm run test:debug`: jalankan debug mode Playwright Inspector.
 - `npm run test:report`: buka report terakhir.
@@ -54,6 +55,7 @@ Gunakan command berikut sesuai kebutuhan:
 
 ## 4) Repository Map
 - `playwright.config.ts`: konfigurasi global Playwright.
+- `playwright.e2e-ui.config.ts`: konfigurasi khusus UI E2E tanpa project `setup`.
 - `tests/auth.setup.ts`: global auth setup untuk membuat session login.
 - `playwright/.auth/user.json`: storage state global authenticated user.
 - `tests/e2e`: skenario end-to-end utama.
@@ -87,6 +89,7 @@ Gunakan panduan ini saat task terkait login/session:
 4. Jika ingin test login flow murni, override storage state kosong seperti di `tests/e2e/login.spec.ts`.
 5. Skenario logout sebaiknya juga isolated dengan storage state kosong (login sendiri di test tersebut), agar tidak memutus session suite lain.
 6. Jika session invalid, jalankan ulang setup/auth test agar storage state diperbarui.
+7. Untuk UI debugging reuse session, gunakan config UI terpisah (`playwright.e2e-ui.config.ts`) via `npm run test:e2e:ui` agar `auth.setup.ts` tidak auto-run.
 
 Command rujukan:
 - `npm test -- tests/auth.setup.ts`
@@ -122,7 +125,8 @@ Command baseline CI:
 ## 10.1) Post-Automation Execution Rule (Wajib)
 - Setelah AI selesai membuat atau mengubah automation test, AI **tidak boleh menjalankan test secara otomatis**.
 - AI harus meminta user menjalankan test secara manual.
-- AI harus selalu menyertakan panduan menjalankan test via UI mode (Playwright UI) pada jawaban akhir setelah pembuatan automation.
+- AI harus selalu menyertakan panduan menjalankan test via `npm run test:e2e:ui` pada jawaban akhir setelah pembuatan automation.
+- AI harus selalu mengingatkan user menjalankan `npm run auth:setup` manual **jika** session auth belum dibuat, kadaluarsa, atau invalid sebelum menjalankan `npm run test:e2e:ui`.
 - Jika user ingin AI yang menjalankan test, AI hanya boleh menjalankan setelah ada instruksi eksplisit dari user.
 
 ## 11) Quick Help Response Template
