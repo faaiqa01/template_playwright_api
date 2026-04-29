@@ -200,7 +200,7 @@ Aturan penggunaan AI:
 
 Template ini menggunakan pola authenticated session global:
 
-- File setup: `tests/auth.setup.ts`
+- File setup: `tests/helpers/auth.setup.ts`
 - Session file: `playwright/.auth/user.json`
 - Setup project dijalankan otomatis lewat `dependencies` di `playwright.config.ts`
 - Test yang membutuhkan user login (contoh dashboard) tidak perlu login ulang di `beforeEach`
@@ -434,4 +434,5 @@ ISC
 
 **Versi**: 1.0.0
 **Last Updated**: 2026-04-15
+
 
