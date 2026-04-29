@@ -56,7 +56,7 @@ Gunakan command berikut sesuai kebutuhan:
 ## 4) Repository Map
 - `playwright.config.ts`: konfigurasi global Playwright.
 - `playwright.e2e-ui.config.ts`: konfigurasi khusus UI E2E tanpa project `setup`.
-- `tests/auth.setup.ts`: global auth setup untuk membuat session login.
+- `tests/helpers/auth.setup.ts`: global auth setup untuk membuat session login.
 - `playwright/.auth/user.json`: storage state global authenticated user.
 - `tests/e2e`: skenario end-to-end utama.
 - `tests/integration`: skenario antar modul.
@@ -83,7 +83,7 @@ Urutan debug yang direkomendasikan:
 
 ## 7) Auth Workflow (`help auth`)
 Gunakan panduan ini saat task terkait login/session:
-1. Global authenticated session dibuat lewat `tests/auth.setup.ts`.
+1. Global authenticated session dibuat lewat `tests/helpers/auth.setup.ts`.
 2. Storage state utama: `playwright/.auth/user.json`.
 3. Test authenticated sebaiknya gunakan session global (hindari login ulang di tiap test).
 4. Jika ingin test login flow murni, override storage state kosong seperti di `tests/e2e/login.spec.ts`.
@@ -92,7 +92,7 @@ Gunakan panduan ini saat task terkait login/session:
 7. Untuk UI debugging reuse session, gunakan config UI terpisah (`playwright.e2e-ui.config.ts`) via `npm run test:e2e:ui` agar `auth.setup.ts` tidak auto-run.
 
 Command rujukan:
-- `npm test -- tests/auth.setup.ts`
+- `npm test -- tests/helpers/auth.setup.ts`
 - `npm run test:e2e`
 
 ## 8) CI Workflow (`help ci`)
@@ -152,7 +152,7 @@ Saat user mengetik `help auth`, agent bisa jawab format berikut:
 
 ```text
 Auth quick help:
-1. Global auth setup ada di tests/auth.setup.ts.
+1. Global auth setup ada di tests/helpers/auth.setup.ts.
 2. Storage state utama ada di playwright/.auth/user.json.
 3. Untuk test authenticated, gunakan session global; jangan login ulang tiap test.
 4. Untuk login flow murni, pakai storageState kosong (lihat tests/e2e/login.spec.ts).
@@ -173,3 +173,4 @@ CI quick help:
    - npm test
 4. Simpan artifact: playwright-report dan test-results.
 ```
+

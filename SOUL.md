@@ -69,7 +69,7 @@ Rule ID: `SOUL-TEMPLATE-CLEANUP-001`
 ## 🔐 Login Session Strategy (Wajib)
 
 Gunakan global authenticated session untuk test yang membutuhkan user sudah login:
-- Buat setup test khusus (contoh: `tests/auth.setup.ts`) untuk login sekali.
+- Buat setup test khusus (contoh: `tests/helpers/auth.setup.ts`) untuk login sekali.
 - Simpan session ke `storageState` (contoh: `playwright/.auth/user.json`).
 - Konfigurasikan project browser dengan `dependencies: ['setup']` dan `use.storageState`.
 - Untuk test area authenticated (mis. dashboard/profile), jangan login ulang di `beforeEach`; langsung navigate ke halaman target.
@@ -561,3 +561,4 @@ test.beforeEach(async ({ page }) => {
 **Versi**: 1.0.0
 **Last Updated**: 2026-03-22
 **Maintainer**: Development Team
+

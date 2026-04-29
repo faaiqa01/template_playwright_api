@@ -60,7 +60,7 @@ npm run test:headed
 ```
 
 Catatan auth:
-- Project ini menggunakan global login session (`tests/auth.setup.ts` + `storageState`).
+- Project ini menggunakan global login session (`tests/helpers/auth.setup.ts` + `storageState`).
 - Untuk test authenticated, hindari login ulang di setiap `beforeEach`.
 - Skenario login (`tests/e2e/login.spec.ts` dan sejenisnya) wajib berjalan tanpa session global.
 - Skenario logout (`tests/e2e/logout.spec.ts` dan sejenisnya) wajib isolated (storage state kosong + login di dalam spec).
@@ -266,3 +266,4 @@ Jika Anda memiliki pertanyaan, jangan ragu untuk:
 3. Membaca [SOUL.md](./SOUL.md) untuk detail best practices
 
 Terima kasih atas kontribusi Anda! 🚀
+
