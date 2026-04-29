@@ -17,6 +17,36 @@ Template Playwright dengan arsitektur best practice untuk end-to-end testing. Fr
 - **Playwright MCP (Project-local)** - MCP server khusus project untuk automation/debugging browser
 - **Context7 MCP (Project-local)** - MCP server untuk dokumentasi library/API terbaru
 
+## Rules Repository Split (Recommended)
+
+Agar perubahan aturan tidak tercampur dengan perubahan project, gunakan folder khusus:
+
+- Source aturan: `standards/rules/`
+- Mirror di root: `AGENTS.md`, `SOUL.md`, `CONTRIBUTING.md`
+
+Sync command:
+
+```bash
+# Setelah edit aturan di root, copy ke source rules
+npm run rules:sync:from-root
+
+# Setelah update source rules, copy kembali ke root
+npm run rules:sync:to-root
+```
+
+Workflow `git subtree` (aturan ke repo template rules):
+
+```bash
+# Tambah remote repo aturan (sekali saja)
+git remote add template-rules <URL_REPO_RULES>
+
+# Push hanya folder aturan ke repo rules
+git subtree push --prefix standards/rules template-rules main
+
+# Tarik update terbaru dari repo rules
+git subtree pull --prefix standards/rules template-rules main --squash
+```
+
 ## 🏗️ Architecture
 
 Project ini mengikuti best practices yang dijelaskan di [`SOUL.md`](./SOUL.md):
@@ -200,6 +230,8 @@ Pengecualian penting:
 | `npm run mcp:playwright` | Run Playwright MCP server for this project |
 | `npm run install:browsers` | Install all browser binaries |
 | `npm run codegen` | Generate test code with Playwright Inspector |
+| `npm run rules:sync:from-root` | Sync AGENTS/SOUL/CONTRIBUTING dari root ke `standards/rules` |
+| `npm run rules:sync:to-root` | Sync AGENTS/SOUL/CONTRIBUTING dari `standards/rules` ke root |
 
 ## 📚 Documentation
 

@@ -4,13 +4,14 @@
   "description": "Playwright E2E Testing Template with Best Practices",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
-    "test:e2e": "playwright test tests/e2e",
-    "test:integration": "playwright test tests/integration",
-    "test:unit": "playwright test tests/unit",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug",
+    "auth:setup": "playwright test tests/auth.setup.ts --project=setup",
+    "test": "playwright test --project=chromium --no-deps",
+    "test:e2e": "playwright test tests/e2e --project=chromium --no-deps",
+    "test:integration": "playwright test tests/integration --project=chromium --no-deps",
+    "test:unit": "playwright test tests/unit --project=chromium --no-deps",
+    "test:ui": "playwright test tests/e2e --project=chromium --ui --no-deps",
+    "test:headed": "playwright test --project=chromium --headed --no-deps",
+    "test:debug": "playwright test --project=chromium --debug --no-deps",
     "test:report": "playwright show-report",
     "test:chrome": "playwright test --project=chromium",
     "test:firefox": "playwright test --project=firefox",
@@ -26,7 +27,9 @@
     "install:firefox": "playwright install firefox",
     "install:webkit": "playwright install webkit",
     "codegen": "playwright codegen",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "rules:sync:to-root": "node scripts/sync-rules.mjs to-root",
+    "rules:sync:from-root": "node scripts/sync-rules.mjs from-root"
   },
   "keywords": [
     "playwright",
