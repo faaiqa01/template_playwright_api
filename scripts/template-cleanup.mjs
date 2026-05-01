@@ -4,7 +4,7 @@ import path from 'path';
 const projectRoot = process.cwd();
 
 const TARGET_DIRS = [
-    'tests',
+    path.join('tests', 'api'),
     path.join('src', 'fixtures'),
 ];
 
@@ -14,22 +14,22 @@ const FILE_PATTERNS = [
     /(example|sample|template)\.(ts|js)$/i,
 ];
 
-const removedFiles = [];
+const removedFiles: string[] = [];
 
-async function exists(targetPath) {
+const exists = async (targetPath: string): Promise<boolean> => {
     try {
         await fs.access(targetPath);
         return true;
     } catch {
         return false;
     }
-}
+};
 
-function shouldRemove(fileName) {
+const shouldRemove = (fileName: string): boolean => {
     return FILE_PATTERNS.some((pattern) => pattern.test(fileName));
-}
+};
 
-async function walkAndRemove(dirPath) {
+const walkAndRemove = async (dirPath: string): Promise<void> => {
     if (!(await exists(dirPath))) {
         return;
     }
@@ -48,32 +48,12 @@ async function walkAndRemove(dirPath) {
             removedFiles.push(path.relative(projectRoot, fullPath));
         }
     }
-}
+};
 
-async function cleanupFixtureIndex() {
-    const fixtureIndexPath = path.join(projectRoot, 'src', 'fixtures', 'index.ts');
-    if (!(await exists(fixtureIndexPath))) {
-        return;
-    }
-
-    const content = await fs.readFile(fixtureIndexPath, 'utf8');
-    const cleaned = content
-        .split('\n')
-        .filter((line) => !/(example|sample|template)\.fixture/i.test(line))
-        .join('\n');
-
-    if (cleaned !== content) {
-        await fs.writeFile(fixtureIndexPath, cleaned, 'utf8');
-    }
-}
-
-async function main() {
+const main = async (): Promise<void> => {
     for (const relativeDir of TARGET_DIRS) {
-        const dirPath = path.join(projectRoot, relativeDir);
-        await walkAndRemove(dirPath);
+        await walkAndRemove(path.join(projectRoot, relativeDir));
     }
-
-    await cleanupFixtureIndex();
 
     if (removedFiles.length === 0) {
         console.log('Template cleanup completed. No sample/example/template files found.');
@@ -84,9 +64,9 @@ async function main() {
     for (const file of removedFiles) {
         console.log(`- ${file}`);
     }
-}
+};
 
-main().catch((error) => {
+main().catch((error: unknown) => {
     console.error('Template cleanup failed:', error);
     process.exit(1);
 });
