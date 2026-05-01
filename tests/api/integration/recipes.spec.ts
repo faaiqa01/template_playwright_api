@@ -58,5 +58,21 @@ test.describe('@integration DummyJSON Recipes Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('unknown recipe tag returns empty result', async ({ apiClient }) => {
+        const response = await apiClient.get('/recipes/tag/zzzxxyyynonexistingtag', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.recipes)).toBe(true);
+        expect(body.recipes.length).toBe(0);
+    });
+
+    test('recipes list with high skip returns deterministic paging payload', async ({ apiClient }) => {
+        const response = await apiClient.get('/recipes?limit=10&skip=10000', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.recipes)).toBe(true);
+        expect(typeof body.total).toBe('number');
+        expect(body.skip).toBe(10000);
+        expect(body.recipes.length).toBe(0);
+    });
 });
 

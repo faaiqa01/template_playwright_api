@@ -57,5 +57,21 @@ test.describe('@integration DummyJSON Products Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('search products with unmatched keyword returns empty array', async ({ apiClient }) => {
+        const response = await apiClient.get('/products/search?q=zzzxxyyynonexisting', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.products)).toBe(true);
+        expect(body.products.length).toBe(0);
+    });
+
+    test('products pagination with high skip returns deterministic paging payload', async ({ apiClient }) => {
+        const response = await apiClient.get('/products?limit=10&skip=10000', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.products)).toBe(true);
+        expect(typeof body.total).toBe('number');
+        expect(body.skip).toBe(10000);
+        expect(body.products.length).toBe(0);
+    });
 });
 

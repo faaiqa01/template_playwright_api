@@ -78,5 +78,43 @@ test.describe('@integration DummyJSON Carts Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('add cart with zero quantity is normalized by dummy API mock behavior', async ({ apiClient }) => {
+        const response = await apiClient.postJson(
+            '/carts/add',
+            {
+                userId: 1,
+                products: [
+                    { id: 144, quantity: 0 },
+                ],
+            },
+            201,
+        );
+
+        const body = await response.json();
+        expect(Array.isArray(body.products)).toBe(true);
+        expect(body.products.length).toBe(1);
+        expect(body.products[0].quantity).toBe(1);
+    });
+
+    test('created cart summary is mathematically consistent', async ({ apiClient }) => {
+        const response = await apiClient.postJson(
+            '/carts/add',
+            {
+                userId: 1,
+                products: [
+                    { id: 98, quantity: 1 },
+                    { id: 144, quantity: 1 },
+                ],
+            },
+            201,
+        );
+
+        const body = await response.json();
+        expect(body.totalProducts).toBe(body.products.length);
+        expect(body.totalQuantity).toBeGreaterThanOrEqual(body.totalProducts);
+        expect(body.total).toBeGreaterThan(0);
+        expect(body.discountedTotal).toBeGreaterThan(0);
+    });
 });
 

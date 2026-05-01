@@ -46,5 +46,23 @@ test.describe('@integration DummyJSON Todos and Quotes Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('unknown quote id returns not found response', async ({ apiClient }) => {
+        const response = await apiClient.get('/quotes/999999', 404);
+        const body = await response.json();
+        expect(typeof body.message).toBe('string');
+    });
+
+    test('random todo endpoint returns stable response shape across repeated calls', async ({ apiClient }) => {
+        const iterations = 3;
+        for (let index = 0; index < iterations; index += 1) {
+            const response = await apiClient.get('/todos/random', 200);
+            const body = await response.json();
+            expect(typeof body.id).toBe('number');
+            expect(typeof body.todo).toBe('string');
+            expect(typeof body.completed).toBe('boolean');
+            expect(typeof body.userId).toBe('number');
+        }
+    });
 });
 

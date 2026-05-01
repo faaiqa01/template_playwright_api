@@ -50,5 +50,21 @@ test.describe('@integration DummyJSON Users Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('search users with unmatched keyword returns empty array', async ({ apiClient }) => {
+        const response = await apiClient.get('/users/search?q=zzzxxyyynonexisting', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.users)).toBe(true);
+        expect(body.users.length).toBe(0);
+    });
+
+    test('users pagination with high skip returns deterministic paging payload', async ({ apiClient }) => {
+        const response = await apiClient.get('/users?limit=10&skip=1000', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.users)).toBe(true);
+        expect(typeof body.total).toBe('number');
+        expect(body.skip).toBe(1000);
+        expect(body.users.length).toBe(0);
+    });
 });
 

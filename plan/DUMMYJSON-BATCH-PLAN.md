@@ -16,6 +16,7 @@ Gunakan tabel ini untuk menandai status validasi per batch setelah implementasi.
 | Batch 6 - Todos and Quotes | Sudah | Sudah | 2026-05-02 | List/detail todos, random todo, quotes list, negative invalid id |
 | Batch 7 - Recipes (Optional) | Sudah | Sudah | 2026-05-02 | List/detail recipes, tags, recipes by tag, negative invalid id |
 | Batch 8 - Reliability and CI Hardening | Sudah | Sudah | 2026-05-02 | Tag-based run, junit report, reliability assertions |
+| Batch 9 - Scenario Expansion | Sudah | Sudah | 2026-05-02 | Validasi final 60/60 pass setelah penyesuaian behavior aktual DummyJSON |
 
 Keterangan status:
 - `Implementasi`: `Belum` | `In Progress` | `Sudah`
@@ -208,6 +209,63 @@ Hasil implementasi:
 - Reporter `junit` ditambahkan di `playwright.config.ts` (`test-results/results.xml`).
 - Spec reliability baru: `tests/api/integration/reliability.spec.ts`.
 
+## Batch 9 - Scenario Expansion
+Status: `done`
+
+Target:
+- Menambah skenario lanjutan untuk semua domain yang sudah ada tanpa mengubah struktur layer test.
+- Fokus pada edge case, negative case tambahan, dan flow fungsional yang lebih realistis.
+
+Scope per domain:
+- Auth:
+  - Refresh token invalid/expired.
+  - Login payload tidak lengkap.
+  - Auth me dengan token malformed.
+- Users:
+  - Pagination boundary (`limit=0`, `skip` besar).
+  - Search tanpa hasil.
+  - Invalid query parameter handling.
+- Products:
+  - Search tanpa hasil.
+  - Invalid product/category path.
+  - Boundary paging (`limit`, `skip`).
+- Carts:
+  - Payload quantity edge case (`0`/negatif).
+  - Invalid product id saat add cart.
+  - Validasi konsistensi summary totals.
+- Posts and Comments:
+  - Search tanpa hasil.
+  - Invalid comments path.
+  - Relasi post-comment tambahan (subset sampling).
+- Todos and Quotes:
+  - Invalid todo/quote id tambahan.
+  - Random endpoint repeatability sanity.
+  - Response shape consistency lintas beberapa sample.
+- Recipes:
+  - Unknown tag behavior.
+  - Search/filter result kosong.
+  - Tag matching tambahan dengan variasi tag.
+
+Output yang diharapkan:
+- Penambahan test di file domain existing (tanpa duplikasi tidak perlu).
+- Semua test baru mengikuti `test.step()`, assertion spesifik, dan deterministic checks.
+- Tracker batch diupdate setelah implementasi + validasi manual.
+
+Hasil implementasi:
+- `tests/api/integration/auth.spec.ts`
+- `tests/api/integration/users.spec.ts`
+- `tests/api/integration/products.spec.ts`
+- `tests/api/integration/carts.spec.ts`
+- `tests/api/integration/posts-comments.spec.ts`
+- `tests/api/integration/todos-quotes.spec.ts`
+- `tests/api/integration/recipes.spec.ts`
+
+Hasil validasi manual final (`npm run test:api`, 2026-05-02):
+- `60 passed`, `0 failed` (total 60 test).
+- Penyesuaian yang dilakukan agar selaras dengan behavior aktual DummyJSON:
+  - Refresh token malformed: expect `403` (bukan `401`).
+  - Add cart quantity `0`: API menormalkan quantity menjadi `1` dengan status `201`.
+
 ## Suggested Execution Order
 1. Batch 1
 2. Batch 2
@@ -217,6 +275,7 @@ Hasil implementasi:
 6. Batch 6
 7. Batch 8
 8. Batch 7 (optional)
+9. Batch 9
 
 ## Template Update per Batch
 Salin template ini saat update progres:

@@ -67,5 +67,32 @@ test.describe('@integration DummyJSON Auth Integration', () => {
         const body = await response.json();
         expect(typeof body.message).toBe('string');
     });
+
+    test('login with incomplete payload returns 400', async ({ apiClient }) => {
+        const response = await apiClient.postJson(
+            '/auth/login',
+            {
+                username: dummyJsonLoginFixture.username,
+            },
+            400,
+        );
+
+        const body = await response.json();
+        expect(typeof body.message).toBe('string');
+    });
+
+    test('refresh with malformed token returns forbidden response', async ({ apiClient }) => {
+        const response = await apiClient.postJson(
+            '/auth/refresh',
+            {
+                refreshToken: 'malformed-refresh-token',
+                expiresInMins: dummyJsonLoginFixture.expiresInMins,
+            },
+            403,
+        );
+
+        const body = await response.json();
+        expect(typeof body.message).toBe('string');
+    });
 });
 

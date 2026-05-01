@@ -73,5 +73,18 @@ test.describe('@integration DummyJSON Posts and Comments Integration', () => {
         expect(Array.isArray(body.comments)).toBe(true);
         expect(body.comments.length).toBeGreaterThan(0);
     });
+
+    test('search posts with unmatched keyword returns empty array', async ({ apiClient }) => {
+        const response = await apiClient.get('/posts/search?q=zzzxxyyynonexisting', 200);
+        const body = await response.json();
+        expect(Array.isArray(body.posts)).toBe(true);
+        expect(body.posts.length).toBe(0);
+    });
+
+    test('unknown comment id returns not found response', async ({ apiClient }) => {
+        const response = await apiClient.get('/comments/999999', 404);
+        const body = await response.json();
+        expect(typeof body.message).toBe('string');
+    });
 });
 

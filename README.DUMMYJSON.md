@@ -8,7 +8,17 @@ README utama project tidak diubah oleh dokumen ini.
 - Auth docs: https://dummyjson.com/docs/auth
 
 ## Status Implementasi
-Semua batch pada `plan/DUMMYJSON-BATCH-PLAN.md` sudah selesai implementasi dan sudah tervalidasi manual.
+Semua batch pada `plan/DUMMYJSON-BATCH-PLAN.md` sudah selesai implementasi.
+Validasi manual terbaru sudah full pass setelah penyesuaian skenario terhadap behavior aktual DummyJSON.
+
+## Status Validasi Terbaru
+- Tanggal: `2026-05-02`
+- Command: `npm run test:api`
+- Hasil final: `60 passed`, `0 failed` (total 60 test)
+
+Penyesuaian penting pada Batch 9:
+1. Refresh token malformed disesuaikan menjadi expect `403`.
+2. Add cart dengan quantity `0` mengikuti behavior DummyJSON yang menormalkan quantity menjadi `1` dengan status `201`.
 
 ## Cakupan Test
 ### Domain yang sudah di-cover
