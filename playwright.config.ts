@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-const apiBaseUrl = process.env.API_BASE_URL ?? 'https://jsonplaceholder.typicode.com';
+const apiBaseUrl = process.env.API_BASE_URL ?? 'https://dummyjson.com';
 const apiToken = process.env.API_TOKEN;
 
 export default defineConfig({
@@ -17,6 +17,8 @@ export default defineConfig({
         ['html', { outputFolder: 'playwright-report', open: 'never' }],
         ['list'],
         ['json', { outputFile: 'test-results/results.json' }],
+        ['junit', { outputFile: 'test-results/results.xml' }],
+        ['./tests/helpers/file-log-reporter.ts'],
     ],
     use: {
         baseURL: apiBaseUrl,

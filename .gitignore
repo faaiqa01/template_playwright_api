@@ -9,7 +9,8 @@ playwright-report/
 # Environment files
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
 .envrc
 
 # Build output
