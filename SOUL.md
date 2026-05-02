@@ -22,6 +22,8 @@ Single source of truth untuk template API testing berbasis Playwright + TypeScri
 6. Isolasi test: setiap test harus bisa dijalankan sendiri.
 7. Jangan hardcode secret; gunakan `API_TOKEN` dan `.env`.
 8. Untuk contract test, validasi field wajib dan tipe data inti.
+9. Setiap test wajib memiliki `TC ID` pada judul test.
+10. Format judul test: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi>`.
 
 ## Context7 MCP Policy (Wajib)
 Untuk pertanyaan teknis library/API:

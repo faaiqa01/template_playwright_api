@@ -89,6 +89,9 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 - Gunakan `test.step()` untuk langkah bisnis utama.
 - Tambahkan positive path + minimal satu negative/edge case.
 - Hindari data random yang membuat flaky kecuali dibutuhkan.
+- **Wajib gunakan Test Case ID (`TC ID`) pada setiap judul test**.
+- Format wajib: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi test>`.
+- Contoh: `[TC-AUTH-001] login success then get auth user`.
 
 ## Response Style
 - Ringkas, langsung eksekusi.

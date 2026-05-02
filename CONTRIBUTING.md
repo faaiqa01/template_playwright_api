@@ -35,6 +35,8 @@ Untuk perubahan yang bergantung pada API/library behavior terbaru:
 - Assertion spesifik (`toHaveStatus`, cek field inti payload).
 - Test independent dan deterministik.
 - Secret wajib dari environment variable.
+- Wajib gunakan `TC ID` di judul setiap test.
+- Format TC ID: `[TC-<DOMAIN>-<3DIGIT>]`.
 
 ## Pull Request Checklist
 1. Semua test relevan pass.
