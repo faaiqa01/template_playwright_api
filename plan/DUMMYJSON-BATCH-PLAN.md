@@ -17,6 +17,7 @@ Gunakan tabel ini untuk menandai status validasi per batch setelah implementasi.
 | Batch 7 - Recipes (Optional) | Sudah | Sudah | 2026-05-02 | List/detail recipes, tags, recipes by tag, negative invalid id |
 | Batch 8 - Reliability and CI Hardening | Sudah | Sudah | 2026-05-02 | Tag-based run, junit report, reliability assertions |
 | Batch 9 - Scenario Expansion | Sudah | Sudah | 2026-05-02 | Validasi final 60/60 pass setelah penyesuaian behavior aktual DummyJSON |
+| Batch 10 - Full Docs Coverage (CRUD+) | Sudah | Sudah | 2026-05-02 | Validasi final 85/85 pass setelah penyesuaian assertion pada behavior aktual |
 
 Keterangan status:
 - `Implementasi`: `Belum` | `In Progress` | `Sudah`
@@ -266,6 +267,102 @@ Hasil validasi manual final (`npm run test:api`, 2026-05-02):
   - Refresh token malformed: expect `403` (bukan `401`).
   - Add cart quantity `0`: API menormalkan quantity menjadi `1` dengan status `201`.
 
+## Docs Coverage Matrix (Source of Truth)
+Referensi utama: `https://dummyjson.com/docs` (menu endpoint lengkap).
+
+Status saat ini:
+- Sudah covered kuat: Auth, Users (read/search), Products (read/search/categories), Carts (read/add), Posts/Comments (read/search), Todos/Quotes (read/random), Recipes (read/tags).
+- Belum covered penuh: mayoritas `POST/PUT/PATCH/DELETE` pada beberapa resource + beberapa varian `sort/filter/select/tag/user`.
+
+### Endpoint Families dari Docs yang harus ditutup
+1. Core/Meta
+- `/test` (all methods), delay param, auth-as-user pattern, `/ip`, query `select`.
+2. Auth
+- `/auth/login`, `/auth/me`, `/auth/refresh` (sudah basic, perlu variasi method/payload lebih luas).
+3. Products
+- Read: all/single/search/limit-skip/sort/categories/category-list/by-category (sebagian sudah).
+- Write: add/update/patch/delete (belum full).
+4. Carts
+- Read: all/single/by-user (sudah).
+- Write: add/update/patch/delete (update/delete belum).
+5. Recipes
+- Read: all/single/search/limit-skip/sort/tags/by-tag/by-meal (by-meal belum).
+- Write: add/update/patch/delete (belum).
+6. Users
+- Read: all/single/search/filter/limit-skip/sort + user-carts/posts/todos (nested user endpoints belum penuh).
+- Write: add/update/patch/delete (belum).
+7. Posts
+- Read: all/single/search/limit-skip/sort/by-user/comments (by-user/sort/limit-skip belum penuh).
+- Write: add/update/patch/delete (belum).
+8. Comments
+- Read: all/single/limit-skip/by-post (by-post via `/comments/post/{id}` belum).
+- Write: add/update/patch/delete (belum).
+9. Todos
+- Read: all/single/random/limit-skip (sudah sebagian).
+- Write: add/update/patch/delete (belum).
+10. Quotes
+- Read: all/single/random/limit-skip (sudah sebagian, belum limit-skip depth).
+11. Dynamic Image + Mock HTTP
+- Dynamic image variants (size/text/color/format/font/identicon).
+- Mock HTTP response/custom response endpoints.
+12. Custom Response Generator
+- Validasi custom response behavior lintas method (`GET/POST/PUT/PATCH/DELETE`) dan query modifiers (`limit/skip/select/sortBy/order`) sesuai fitur repo.
+13. Global Query Features (lintas resource)
+- `limit`, `skip`, `select` (single/multiple), `sortBy`, `order`, `delay`.
+- Variasi ini harus diuji minimal di `products`, `users`, `posts`, `comments`, `todos`, `recipes`, `quotes`.
+
+## Batch 10 - Full Docs Coverage (CRUD+)
+Status: `done`
+
+Target:
+- Menutup semua gap endpoint dari Docs Coverage Matrix dengan prioritas CRUD dan query variants.
+- Menjaga best practice existing: layer terpisah, assertion spesifik, deterministic checks, dan `test.step()`.
+
+Sub-batch eksekusi:
+1. `10A - CRUD Core` (`done - implementasi`):
+- Products, Carts, Users, Posts, Comments, Todos, Recipes untuk `add/update/patch/delete`.
+2. `10B - Query/Filter/Sort Expansion` (`done - implementasi`):
+- `limit/skip/select/sort/filter` untuk domain utama.
+3. `10C - Nested & Cross-resource` (`done - implementasi`):
+- Users nested endpoints (`/users/{id}/carts|posts|todos`), posts-by-user, comments-by-post.
+4. `10D - Platform Utilities` (`done - implementasi`):
+- `/test`, `/ip`, delay behavior, Dynamic Image, Mock HTTP.
+5. `10E - Custom Response & Query Modifiers` (`done - implementasi`):
+- Custom response endpoint scenarios.
+- `sortBy/order/select/limit/skip` compatibility checks lintas resource.
+
+Prioritas khusus dari cross-check GitHub repo:
+- Pastikan coverage untuk fitur yang disebut di repo README:
+  - Custom Responses
+  - Filters and Nested Resources
+  - HTTP Methods Support (GET/POST/PUT/PATCH/DELETE)
+  - Delay Responses
+  - Dynamic Image Generation + Identicon
+
+Definition of Done Batch 10:
+- Semua endpoint family di atas punya minimal satu test valid (positive).
+- Untuk endpoint write, wajib ada minimal satu negative case.
+- Untuk endpoint query modifiers, minimal 1 kombinasi multi-parameter tervalidasi per resource utama.
+- Hasil run `npm run test:api` pass penuh setelah integrasi akhir.
+
+Status implementasi saat ini:
+- `10A` selesai implementasi pada file:
+  - `tests/api/integration/crud-core-batch1.spec.ts`
+  - `tests/helpers/api-client.ts` (tambahan helper `putJson`, `patchJson`, `delete`)
+- `10B` selesai implementasi pada file:
+  - `tests/api/integration/query-filter-sort-batch10b.spec.ts`
+- `10C` selesai implementasi pada file:
+  - `tests/api/integration/nested-cross-resource-batch10c.spec.ts`
+- `10D` selesai implementasi pada file:
+  - `tests/api/integration/platform-utilities-batch10d.spec.ts`
+- `10E` selesai implementasi pada file:
+  - `tests/api/integration/custom-response-modifiers-batch10e.spec.ts`
+- Validasi manual sudah dijalankan untuk seluruh sub-batch 10A-10E.
+
+Hasil validasi manual final (`npm run test:api`, 2026-05-02):
+- `85 passed`, `0 failed` (total 85 test).
+- Penyesuaian assertion telah dilakukan agar selaras dengan behavior aktual DummyJSON untuk endpoint CRUD dan query modifiers.
+
 ## Suggested Execution Order
 1. Batch 1
 2. Batch 2
@@ -276,6 +373,7 @@ Hasil validasi manual final (`npm run test:api`, 2026-05-02):
 7. Batch 8
 8. Batch 7 (optional)
 9. Batch 9
+10. Batch 10
 
 ## Template Update per Batch
 Salin template ini saat update progres:

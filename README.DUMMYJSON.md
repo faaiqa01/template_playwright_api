@@ -9,16 +9,17 @@ README utama project tidak diubah oleh dokumen ini.
 
 ## Status Implementasi
 Semua batch pada `plan/DUMMYJSON-BATCH-PLAN.md` sudah selesai implementasi.
-Validasi manual terbaru sudah full pass setelah penyesuaian skenario terhadap behavior aktual DummyJSON.
+Validasi manual terbaru menunjukkan semua suite saat ini sudah stabil dan pass penuh.
 
 ## Status Validasi Terbaru
 - Tanggal: `2026-05-02`
 - Command: `npm run test:api`
-- Hasil final: `60 passed`, `0 failed` (total 60 test)
+- Hasil final: `85 passed`, `0 failed` (total 85 test)
 
-Penyesuaian penting pada Batch 9:
-1. Refresh token malformed disesuaikan menjadi expect `403`.
-2. Add cart dengan quantity `0` mengikuti behavior DummyJSON yang menormalkan quantity menjadi `1` dengan status `201`.
+Penyesuaian penting pada Batch 10 agar sesuai behavior aktual DummyJSON:
+1. Beberapa endpoint write tidak selalu mengembalikan status/shape yang sama dengan asumsi REST murni.
+2. Field `reactions` pada posts berbentuk object (`likes/dislikes`).
+3. Query `select` pada endpoint tertentu tidak selalu menghilangkan semua field lain.
 
 ## Cakupan Test
 ### Domain yang sudah di-cover

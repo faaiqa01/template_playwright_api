@@ -39,6 +39,24 @@ export class ApiClient {
         return response;
     }
 
+    public async putJson(path: string, payload: unknown, expectedStatus: number): Promise<APIResponse> {
+        const response = await this.request.put(path, { data: payload });
+        expect(response.status(), `PUT ${path} should return ${expectedStatus}`).toBe(expectedStatus);
+        return response;
+    }
+
+    public async patchJson(path: string, payload: unknown, expectedStatus: number): Promise<APIResponse> {
+        const response = await this.request.patch(path, { data: payload });
+        expect(response.status(), `PATCH ${path} should return ${expectedStatus}`).toBe(expectedStatus);
+        return response;
+    }
+
+    public async delete(path: string, expectedStatus: number): Promise<APIResponse> {
+        const response = await this.request.delete(path);
+        expect(response.status(), `DELETE ${path} should return ${expectedStatus}`).toBe(expectedStatus);
+        return response;
+    }
+
     public async getWithToken(path: string, token: string, expectedStatus: number): Promise<APIResponse> {
         const response = await this.request.get(path, {
             headers: {
