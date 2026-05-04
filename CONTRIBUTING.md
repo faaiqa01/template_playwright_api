@@ -5,6 +5,7 @@
 2. Install dependency: `npm install`.
 3. Install browser runtime Playwright: `npm run install:browsers`.
 4. Isi `.env` dari `.env.example` (`API_BASE_URL`, optional `API_TOKEN`).
+5. Opsional debug logging: set `API_DEBUG=true` dan `API_LOG_LEVEL=debug`.
 
 ## Development Workflow
 1. Buat branch fitur/fix.
@@ -35,8 +36,19 @@ Untuk perubahan yang bergantung pada API/library behavior terbaru:
 - Assertion spesifik (`toHaveStatus`, cek field inti payload).
 - Test independent dan deterministik.
 - Secret wajib dari environment variable.
+- Log harus aman: redact token/cookie/credential dari output.
+- Logging verbose hanya lewat env flag (`API_DEBUG` / `API_LOG_LEVEL`), bukan default.
 - Wajib gunakan `TC ID` di judul setiap test.
 - Format TC ID: `[TC-<DOMAIN>-<3DIGIT>]`.
+
+## Logging Conventions
+- Single source logging: gunakan satu file logger `tests/helpers/logger.ts`.
+- Default level disarankan `info` atau lebih rendah untuk local run normal.
+- Gunakan `debug` hanya untuk investigasi issue spesifik.
+- Prefer logging terstruktur: `method`, `url/path`, `status`, `durationMs`, `traceId` (jika ada).
+- Hindari logging full response body kecuali diperlukan untuk failure analysis.
+- Saat ada failure penting, lampirkan log relevan ke `test-results` agar mudah ditelusuri di CI.
+- Jangan buat logger baru di test/spec; import dari logger terpusat yang sama.
 
 ## Pull Request Checklist
 1. Semua test relevan pass.

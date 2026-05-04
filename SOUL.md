@@ -25,6 +25,16 @@ Single source of truth untuk template API testing berbasis Playwright + TypeScri
 9. Setiap test wajib memiliki `TC ID` pada judul test.
 10. Format judul test: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi>`.
 
+## Logging Policy (Wajib)
+- Logging hanya dikonfigurasi lewat satu file logger terpusat: `tests/helpers/logger.ts`.
+- Default logging harus low-noise untuk run normal.
+- Debug logging hanya aktif saat `API_DEBUG=true`.
+- Level log dikontrol lewat `API_LOG_LEVEL` dengan nilai: `error`, `warn`, `info`, `debug`.
+- Log request/response harus terfokus (endpoint, method, status, durasi), hindari dump payload berlebihan.
+- Data sensitif wajib di-redact: `Authorization`, `API_TOKEN`, cookie/session, password/credential.
+- Dilarang membuat logger paralel di file spec/helper lain; semua modul harus reuse logger terpusat.
+- Jika test gagal di CI, simpan log pendukung ke artifact `test-results` bersama report.
+
 ## Context7 MCP Policy (Wajib)
 Untuk pertanyaan teknis library/API:
 - Prioritaskan `Context7 MCP` project-local via `npm run mcp:context7`.
@@ -49,6 +59,8 @@ Untuk pertanyaan teknis library/API:
 - Hardcode token/credential di source.
 - Catch error lalu menelan exception.
 - Menggunakan endpoint eksternal tidak stabil untuk semua test tanpa segregasi smoke.
+- Menyalakan verbose log global untuk semua test tanpa flag env.
+- Mencetak header/body sensitif ke console/report.
 
 ## References
 - https://playwright.dev/docs/api-testing

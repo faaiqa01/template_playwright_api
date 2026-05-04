@@ -73,6 +73,14 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 3. Atur timeout via `API_TIMEOUT_MS` bila perlu.
 4. Jangan hardcode secret di test file.
 
+## Logging Workflow
+1. Logging hanya dikonfigurasi lewat satu file terpusat: `tests/helpers/logger.ts`.
+2. Logging default minimal (tidak verbose) untuk run normal.
+3. Aktifkan debug log hanya saat investigasi via `API_DEBUG=true`.
+4. Gunakan `API_LOG_LEVEL` (`error|warn|info|debug`) untuk kontrol detail log.
+5. Wajib redact/masking secret (`Authorization`, `API_TOKEN`, cookie, credential) dari output log.
+6. Saat debug/CI failure, simpan log di `test-results` sebagai artifact pendukung.
+
 ## CI Workflow (`help ci`)
 1. Set `CI=true`.
 2. CI config: `forbidOnly=true`, `retries=2`, `workers=1`.
@@ -89,6 +97,8 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 - Gunakan `test.step()` untuk langkah bisnis utama.
 - Tambahkan positive path + minimal satu negative/edge case.
 - Hindari data random yang membuat flaky kecuali dibutuhkan.
+- Logging request/response harus terfokus dan tidak membocorkan secret.
+- Dilarang membuat logger terpisah per spec/helper; wajib reuse logger terpusat.
 - **Wajib gunakan Test Case ID (`TC ID`) pada setiap judul test**.
 - Format wajib: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi test>`.
 - Contoh: `[TC-AUTH-001] login success then get auth user`.
