@@ -7,12 +7,38 @@
 4. Isi `.env` dari `.env.example` (`API_BASE_URL`, optional `API_TOKEN`).
 5. Opsional debug logging: set `API_DEBUG=true` dan `API_LOG_LEVEL=debug`.
 
+## Auth Token Conventions
+- Simpan token auth di `.env` sebagai `API_TOKEN` (jangan di source code).
+- Semua suite (`smoke`, `integration`, `contract`) yang butuh auth wajib pakai token dari config/fixture terpusat.
+- Jangan buat token berbeda per test kecuali skenario test memang memvalidasi multi-role auth.
+- Untuk perubahan token, cukup update env/secrets manager.
+- Cek dan pakai token existing terlebih dulu; jangan login ulang jika token masih valid.
+- Jalankan login hanya sebagai fallback saat token invalid/expired atau respons auth `401/403`.
+
 ## Development Workflow
+0. Untuk inisialisasi automation pertama: hapus dulu file template bawaan yang tidak dipakai.
 1. Buat branch fitur/fix.
 2. Tambahkan atau ubah test di `tests/api`.
 3. Reuse helper `tests/helpers/api-client.ts`.
 4. Gunakan `test.step()` untuk flow utama.
 5. Jalankan lint/test sebelum PR.
+
+## Template Cleanup Policy
+- Cleanup file template bawaan wajib dilakukan sebelum pembuatan automation pertama.
+- Jangan hapus file yang statusnya belum jelas; konfirmasi dulu ke user.
+- Prioritas file template untuk dievaluasi/hapus:
+- `tests/api/smoke/health.spec.ts`
+- `tests/api/integration/posts.spec.ts`
+- `tests/api/contract/posts.contract.spec.ts`
+- `tests/unit/utils.spec.ts` (jika tidak dipakai pada project API-only)
+- `src/utils/string.util.ts`
+- `src/utils/date.util.ts`
+- `src/utils/common.util.ts`
+- File fondasi yang umumnya dipertahankan:
+- `tests/helpers/api-client.ts`
+- `tests/helpers/api-fixtures.ts`
+- `src/config/api.config.ts`
+- `src/fixtures/api.fixture.ts`
 
 ## Test Commands
 - `npm run test:api`

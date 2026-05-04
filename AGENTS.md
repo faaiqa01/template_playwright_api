@@ -61,6 +61,23 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 4. Verifikasi command relevan (hanya jika user minta dijalankan).
 5. Laporkan hasil dan risiko tersisa.
 
+## Template Cleanup Rule (Wajib)
+1. Sebelum pembuatan automation pertama kali, AI wajib menghapus file template bawaan yang tidak dipakai.
+2. Cleanup dilakukan terlebih dulu sebelum menambah test/spec automation baru.
+3. Jika ada keraguan file mana yang harus dipertahankan, AI wajib konfirmasi ke user sebelum menghapus.
+
+### Daftar File Template Bawaan (Checklist)
+- `tests/api/smoke/health.spec.ts`
+- `tests/api/integration/posts.spec.ts`
+- `tests/api/contract/posts.contract.spec.ts`
+- `tests/unit/utils.spec.ts` (jika scope project hanya API testing)
+- `src/utils/string.util.ts` (jika tidak dipakai project target)
+- `src/utils/date.util.ts` (jika tidak dipakai project target)
+- `src/utils/common.util.ts` (jika tidak dipakai project target)
+
+Catatan:
+- `tests/helpers/api-client.ts`, `tests/helpers/api-fixtures.ts`, `src/config/api.config.ts`, dan `src/fixtures/api.fixture.ts` default-nya dipertahankan kecuali user minta sebaliknya.
+
 ## Debug Workflow
 1. Jalankan 1 spec yang gagal.
 2. Jalankan mode debug (`npm run test:debug`).
@@ -72,6 +89,14 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 2. Jika endpoint private, set `API_TOKEN`.
 3. Atur timeout via `API_TIMEOUT_MS` bila perlu.
 4. Jangan hardcode secret di test file.
+
+## Token Reuse Rule (Wajib)
+1. Token auth wajib disimpan terpusat via environment variable (`API_TOKEN`) dan/atau fixture auth.
+2. Semua API test yang membutuhkan autentikasi wajib menggunakan token yang sama dari source terpusat tersebut.
+3. Dilarang membuat/menyimpan token hardcode terpisah di spec atau helper lain.
+4. Rotasi token dilakukan di env/config, bukan edit massal di file test.
+5. Jika token masih valid, flow login tidak perlu dijalankan (reuse token existing).
+6. Flow login hanya dijalankan sebagai fallback jika token invalid/expired/unauthorized.
 
 ## Logging Workflow
 1. Logging hanya dikonfigurasi lewat satu file terpusat: `tests/helpers/logger.ts`.
@@ -99,6 +124,7 @@ Jika chat dibuka dengan `halo|hi|hello|pagi`:
 - Hindari data random yang membuat flaky kecuali dibutuhkan.
 - Logging request/response harus terfokus dan tidak membocorkan secret.
 - Dilarang membuat logger terpisah per spec/helper; wajib reuse logger terpusat.
+- Dilarang duplikasi manajemen token auth di banyak file; wajib reuse source token terpusat.
 - **Wajib gunakan Test Case ID (`TC ID`) pada setiap judul test**.
 - Format wajib: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi test>`.
 - Contoh: `[TC-AUTH-001] login success then get auth user`.

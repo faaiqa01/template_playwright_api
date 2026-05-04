@@ -8,6 +8,24 @@ Single source of truth untuk template API testing berbasis Playwright + TypeScri
 - **Fixture Layer**: `tests/helpers/api-fixtures.ts` + `src/fixtures/**`.
 - **Config Layer**: `src/config/api.config.ts` + env vars.
 
+## Template Bootstrap Rule (Wajib)
+- Sebelum automation pertama dibuat, AI/agent wajib melakukan cleanup file template bawaan yang tidak diperlukan.
+- Urutan wajib: cleanup template dulu, baru implement automation.
+- Jika status file ambigu (masih mungkin dipakai), AI/agent harus konfirmasi ke user sebelum penghapusan.
+
+### Template File Inventory (Awal Project)
+- `tests/api/smoke/health.spec.ts` (contoh smoke)
+- `tests/api/integration/posts.spec.ts` (contoh integration)
+- `tests/api/contract/posts.contract.spec.ts` (contoh contract)
+- `tests/unit/utils.spec.ts` (contoh unit; optional untuk template API-only)
+- `src/utils/string.util.ts`, `src/utils/date.util.ts`, `src/utils/common.util.ts` (utility generik template)
+
+Baseline retain:
+- `tests/helpers/api-client.ts`
+- `tests/helpers/api-fixtures.ts`
+- `src/config/api.config.ts`
+- `src/fixtures/api.fixture.ts`
+
 ## Suite Strategy
 - `smoke`: endpoint health dan baseline critical path.
 - `integration`: kombinasi endpoint dan validasi behavior lintas operasi.
@@ -24,6 +42,14 @@ Single source of truth untuk template API testing berbasis Playwright + TypeScri
 8. Untuk contract test, validasi field wajib dan tipe data inti.
 9. Setiap test wajib memiliki `TC ID` pada judul test.
 10. Format judul test: `[TC-<DOMAIN>-<3DIGIT>] <deskripsi>`.
+
+## Auth Token Policy (Wajib)
+- Token autentikasi utama disimpan di source terpusat (`API_TOKEN` env, di-injeksi lewat config/fixture).
+- Semua test API yang butuh auth wajib memakai token dari source terpusat yang sama.
+- Dilarang hardcode token di file spec, helper, atau data fixture.
+- Jika token berubah/rotasi, update hanya di env/config tanpa modifikasi test satu per satu.
+- Prioritas auth flow: validasi token existing terlebih dulu; jika valid maka skip login.
+- Login endpoint hanya dipanggil jika token tidak valid, expired, atau menerima `401/403`.
 
 ## Logging Policy (Wajib)
 - Logging hanya dikonfigurasi lewat satu file logger terpusat: `tests/helpers/logger.ts`.
