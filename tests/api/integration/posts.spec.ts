@@ -1,47 +1,24 @@
-import { dummyJsonLoginFixture } from '../../../src/fixtures';
+import { buildPostPayload } from '../../../src/fixtures';
 import { test, expect } from '../../helpers';
 
-test.describe('@integration DummyJSON Integration', () => {
-    test('POST /auth/login then GET /auth/me with returned token', async ({ apiClient }) => {
-        const loginResponse = await test.step('Act: login with valid credentials', async () => {
-            return apiClient.postJson('/auth/login', dummyJsonLoginFixture, 200);
+test.describe('API Integration', () => {
+    test('POST /posts returns created payload contract', async ({ apiClient }) => {
+        const payload = buildPostPayload();
+
+        const response = await test.step('Act: create a post', async () => {
+            return apiClient.postJson('/posts', payload, 201);
         });
 
-        const loginBody = await loginResponse.json();
-
-        await test.step('Assert: login response includes access token', async () => {
-            expect(loginBody.username).toBe(dummyJsonLoginFixture.username);
-            expect(typeof loginBody.accessToken).toBe('string');
-            expect(loginBody.accessToken.length).toBeGreaterThan(20);
-        });
-
-        const meResponse = await test.step('Act: call /auth/me using bearer token', async () => {
-            return apiClient.getWithToken('/auth/me', loginBody.accessToken as string, 200);
-        });
-
-        await test.step('Assert: /auth/me returns same authenticated user', async () => {
-            const meBody = await meResponse.json();
-            expect(meBody.username).toBe(dummyJsonLoginFixture.username);
-            expect(typeof meBody.email).toBe('string');
+        await test.step('Assert: created response includes echoed body and id', async () => {
+            const body = await response.json();
+            expect(body).toMatchObject(payload);
+            expect(body).toHaveProperty('id');
         });
     });
 
-    test('POST /auth/login with invalid password returns 400', async ({ apiClient }) => {
-        const response = await apiClient.postWithHeaders(
-            '/auth/login',
-            {
-                username: dummyJsonLoginFixture.username,
-                password: 'wrong-password',
-                expiresInMins: 30,
-            },
-            {
-                'Content-Type': 'application/json',
-            },
-            400,
-        );
-
-        const body = await response.json();
-        expect(typeof body.message).toBe('string');
+    test('GET unknown resource returns 404', async ({ apiClient }) => {
+        const response = await apiClient.get('/posts/999999', 404);
+        const bodyText = await response.text();
+        expect(bodyText).toBeTruthy();
     });
 });
-

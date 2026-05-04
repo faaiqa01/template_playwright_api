@@ -1,27 +1,24 @@
 import { test, expect } from '../../helpers';
 
-type DummyJsonProductContract = {
+type PostContract = {
+    userId: number;
     id: number;
     title: string;
-    description: string;
-    price: number;
+    body: string;
 };
 
-const assertProductContract: (payload: unknown) => asserts payload is DummyJsonProductContract = (
-    payload: unknown,
-): asserts payload is DummyJsonProductContract => {
+const assertPostContract = (payload: unknown): asserts payload is PostContract => {
     const record = payload as Record<string, unknown>;
+    expect(typeof record.userId).toBe('number');
     expect(typeof record.id).toBe('number');
     expect(typeof record.title).toBe('string');
-    expect(typeof record.description).toBe('string');
-    expect(typeof record.price).toBe('number');
+    expect(typeof record.body).toBe('string');
 };
 
-test.describe('@contract DummyJSON Contract', () => {
-    test('GET /products/1 matches product contract', async ({ apiClient }) => {
-        const response = await apiClient.get('/products/1', 200);
+test.describe('API Contract', () => {
+    test('GET /posts/1 matches PostContract schema', async ({ apiClient }) => {
+        const response = await apiClient.get('/posts/1', 200);
         const body = await response.json();
-        assertProductContract(body);
+        assertPostContract(body);
     });
 });
-
